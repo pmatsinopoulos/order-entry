@@ -1,18 +1,23 @@
 import './App.scss';
 
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+
+import Home from "./routes/Home";
+import Orders from "./routes/Orders";
 
 function App() {
   return (
-    <Container>
-      <Row>
-        <Col>New Order</Col>
-        <Col>Orders</Col>
-      </Row>
-    </Container>
+    <Router>
+      <Switch>
+        <Route path="/orders">
+          <Orders />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
