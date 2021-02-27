@@ -6,9 +6,10 @@ import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 
 import Home from "./routes/Home";
 import Orders from "./routes/Orders";
+import {ORDERS_BACKEND_URL} from "./constants";
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql',
+  uri: `${ORDERS_BACKEND_URL}/graphql`,
   cache: new InMemoryCache(),
 });
 
