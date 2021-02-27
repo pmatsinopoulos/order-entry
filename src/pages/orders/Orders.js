@@ -45,7 +45,7 @@ const Orders = () => {
           <tbody>
           {data.orders.map((order, index) => {
             return (
-              <tr>
+              <tr key={order.code}>
                 <td>{order.id}</td><td>{order.code}</td>
               </tr>
             )
