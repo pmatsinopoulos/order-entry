@@ -11,8 +11,9 @@ import Alert from "react-bootstrap/Alert";
 const NewOrder = () => {
   let match = useRouteMatch('/:back/new');
   const [state, setState] = useState({
-    code: '',
     createdOrderCode: '',
+    product: '',
+    price: '',
     UI: {
       submitting: false,
       displayingCreatedOrder: false,
@@ -39,7 +40,8 @@ const NewOrder = () => {
         event_class: 'Command',
         event_type: 'CreateOrder',
         payload: {
-          code: state.code,
+          product: state.product,
+          price: parseFloat(state.price),
         },
       };
       const body = JSON.stringify(dataObj);
@@ -77,11 +79,24 @@ const NewOrder = () => {
     event.preventDefault();
   };
 
-  const onCodeChange = (event) => {
+  const onPriceChange = (event) => {
     setState({
       ...state,
-      code: event.target.value,
+      price: event.target.value,
     });
+  };
+
+  const onProductChange = (event) => {
+    setState({
+      ...state,
+      product: event.target.value,
+    });
+  };
+
+  const missingValues = () => {
+    return (
+      !state.product || !state.price
+    );
   };
 
   return (
@@ -95,12 +110,17 @@ const NewOrder = () => {
       )}
       {!state.createdOrderCode && (
         <Form onSubmit={onSubmit}>
-          <Form.Group controlId="formBasicCode">
-            <Form.Label>Code</Form.Label>
-            <Form.Control type="text" placeholder="Enter order code" autoFocus value={state.code} onChange={onCodeChange}/>
+          <Form.Group controlId="formBasicProduct">
+            <Form.Label>Product</Form.Label>
+            <Form.Control type="text" placeholder="Enter product name" autoFocus value={state.code} onChange={onProductChange}/>
           </Form.Group>
 
-          <Button type='submit' disabled={!state.code || state.submitting}>
+          <Form.Group controlId="formBasicPrice">
+            <Form.Label>Price</Form.Label>
+            <Form.Control type="text" placeholder="Enter price" autoFocus value={state.code} onChange={onPriceChange}/>
+          </Form.Group>
+
+          <Button type='submit' disabled={missingValues() || state.submitting}>
             Create Order
           </Button>
         </Form>

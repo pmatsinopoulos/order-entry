@@ -11,6 +11,8 @@ const ORDERS = gql`
     orders {
       id
       code
+      product
+      price
     }
   }
 `;
@@ -39,14 +41,14 @@ const Orders = () => {
         <Table striped bordered hover>
           <thead>
           <tr>
-            <th>#</th><th>Code</th>
+            <th>#</th><th>Code</th><th>Product</th><th>Price</th>
           </tr>
           </thead>
           <tbody>
           {data.orders.map((order, index) => {
             return (
               <tr key={order.code}>
-                <td>{order.id}</td><td>{order.code}</td>
+                <td>{order.id}</td><td>{order.code}</td><td>{order.product}</td><td>{order.price}</td>
               </tr>
             )
           })}
