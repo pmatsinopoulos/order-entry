@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { connect } from 'react-redux'
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -18,7 +19,7 @@ const ORDERS = `
   }
 `;
 
-const Orders = () => {
+const Orders = ({newOrder}) => {
   let match = useRouteMatch();
   const [state, setState] = useState({
     orders: [],
@@ -26,6 +27,13 @@ const Orders = () => {
       loading: false,
     }
   });
+
+  useEffect(() => {
+    setState({
+      ...state,
+      orders: [newOrder, ...state.orders],
+    });
+  }, [newOrder]);
 
   useEffect(() => {
     setState({
@@ -86,4 +94,11 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    newOrder: state.UI.ordersScreen.newOrder,
+  };
+};
+
+export default connect(mapStateToProps)(Orders);
+
