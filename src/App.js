@@ -2,31 +2,41 @@ import './App.scss';
 
 import React from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 
 import Home from "./routes/Home";
 import Orders from "./routes/Orders";
-import {ORDERS_BACKEND_URL} from "./constants";
+import {createConsumer} from "@rails/actioncable";
+import {ORDERS_BACKEND_WS_URL} from "./constants";
 
-const client = new ApolloClient({
-  uri: `${ORDERS_BACKEND_URL}/graphql`,
-  cache: new InMemoryCache(),
-});
+const consumer = createConsumer(`${ORDERS_BACKEND_WS_URL}/cable`);
+consumer.subscriptions.create({
+    channel: 'ApplicationMessagesChannel',
+  },
+  {
+    connected: () => {
+      console.debug('ApplicationMessagesChannel connected');
+    },
+    disconnected: () => {
+      console.debug('ApplicationMessagesChannel disconnected');
+    },
+    received: (data_received) => {
+      console.debug('ApplicationMessagesChannel: data', data_received);
+    },
+  },
+);
 
 function App() {
   return (
-    <ApolloProvider client={client}>
-      <Router>
-        <Switch>
-          <Route path="/orders">
-            <Orders />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    </ApolloProvider>
+    <Router>
+      <Switch>
+        <Route path="/orders">
+          <Orders />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
