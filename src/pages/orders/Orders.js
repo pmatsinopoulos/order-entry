@@ -1,12 +1,13 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import {Link, useRouteMatch} from "react-router-dom";
-import {useQuery, gql} from "@apollo/client";
 
-const ORDERS = gql`
+import graphQLFetch from "../../utils/graphQLFetch";
+
+const ORDERS = `
   query Orders {
     orders {
       id
@@ -19,10 +20,39 @@ const ORDERS = gql`
 
 const Orders = () => {
   let match = useRouteMatch();
-
-  const {loading, error, data} = useQuery(ORDERS, {
-    fetchPolicy: 'cache-and-network',
+  const [state, setState] = useState({
+    orders: [],
+    UI: {
+      loading: false,
+    }
   });
+
+  useEffect(() => {
+    setState({
+      ...state,
+      UI: {
+        ...state.UI,
+        loading: true,
+      },
+    });
+
+    (async () => {
+      let resp = await graphQLFetch({
+        query: ORDERS,
+      });
+
+      const {data: {orders = []} = {}} = resp;
+
+      setState({
+        ...state,
+        orders: state.orders.concat(orders),
+        UI: {
+          ...state.UI,
+          loading: false,
+        },
+      });
+    })();
+  }, []);
 
   return (
     <Container>
@@ -31,13 +61,10 @@ const Orders = () => {
         <Col>Orders List</Col>
         <Col><Link to={`${match.path}/new`}>New Order</Link></Col>
       </Row>
-      {loading && (
+      {state.UI.loading && (
         <div>Loading...</div>
       )}
-      {error && (
-        <div>Error loading data!</div>
-      )}
-      {!loading && !error && (
+      {!state.UI.loading && (
         <Table striped bordered hover>
           <thead>
           <tr>
@@ -45,7 +72,7 @@ const Orders = () => {
           </tr>
           </thead>
           <tbody>
-          {data.orders.map((order, index) => {
+          {state.orders.filter(order => order).map((order, index) => {
             return (
               <tr key={order.code}>
                 <td>{order.id}</td><td>{order.code}</td><td>{order.product}</td><td>{order.price}</td>
