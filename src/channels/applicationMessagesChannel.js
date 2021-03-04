@@ -1,5 +1,5 @@
 import {
-  newOrderCreatedCreator,
+  orderCreatedCreator,
 } from '../store/actions';
 
 const processIncomingMessage = ({dispatch, data}) => {
@@ -9,8 +9,8 @@ const processIncomingMessage = ({dispatch, data}) => {
   } = data;
 
   switch (data.type) {
-    case 'NEW_ORDER_CREATED':
-        dispatch(newOrderCreatedCreator(order));
+    case 'ORDER_CREATED':
+        dispatch(orderCreatedCreator(order));
       break;
     default:
       console.debug('Unknown message type received', data.type);

@@ -1,11 +1,11 @@
-const NEW_ORDER_CREATED = 'NEW_ORDER_CREATED';
+const ORDER_CREATED = 'ORDER_CREATED';
 
-const newOrderCreatedCreator = newOrder => ({
-  type: NEW_ORDER_CREATED,
-  newOrder,
+const orderCreatedCreator = order => ({
+  type: ORDER_CREATED,
+  order,
 });
 
 export {
-  NEW_ORDER_CREATED,
-  newOrderCreatedCreator,
+  ORDER_CREATED,
+  orderCreatedCreator,
 };

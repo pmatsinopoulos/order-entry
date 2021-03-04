@@ -1,5 +1,5 @@
 import {
-  NEW_ORDER_CREATED,
+  ORDER_CREATED,
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -10,10 +10,10 @@ const INITIAL_STATE = {
 
 const UI = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case NEW_ORDER_CREATED:
+    case ORDER_CREATED:
       return {
         ...state,
-        ordersScreen: {newOrder: action.newOrder},
+        ordersScreen: {newOrder: action.order},
       };
     default:
       return state;
